@@ -6,6 +6,8 @@ class Controller:
     def __init__(self, k_p, sp):
         self.k_p = k_p
         self.sp = sp
+        self.resp_time = []
+        self.resp_pos = []
         
     def run(self, sp, act):
         PWM = self.k_p*(sp - act)
@@ -16,6 +18,16 @@ class Controller:
         
     def set_Kp(self, k_p):
         self.k_p = k_p
+        
+    def meas_time(self, time):
+        self.resp_time.append(time)
+        
+    def meas_pos(self, pos):
+        self.resp_pos.append(pos)
+    
+    def print_results(self):
+        for i in self.resp_time:
+            print(f'{self.resp_time[i]},{self.resp_pos[i]}')
     
 if __name__ == "__main__":
     import motor_driver as moto
