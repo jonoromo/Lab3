@@ -1,6 +1,9 @@
  # Lab 3 Code
 
 class Controller:
+    """!
+    Allows users to define proportional gain values and motor position setpoint.
+    """
     
     def __init__(self, k_p, sp):
         self.k_p = k_p
