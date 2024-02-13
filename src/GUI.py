@@ -38,12 +38,15 @@ def plot_example(plot_axes, plot_canvas, xlabel, ylabel):
     # port and processed to make two lists like these
     
     # Create serial port
-    ser = Serial("COM3", 115200) # COM5 for brendan's laptop, COM3 for johnathan
+    ser = Serial("COM5", 115200) # COM5 for brendan's laptop, COM3 for johnathan
     ser.write(b'\x04')
+    time.sleep(.5)
+    kp = "0.1\n"
+    ser.write(kp.encode())
+    
     data = []
     x = []
     y = []
-    v = []
     time.sleep(2.5)
     for i in range(200):
         n = ser.readline().decode("utf-8")
@@ -60,15 +63,10 @@ def plot_example(plot_axes, plot_canvas, xlabel, ylabel):
         except:
             continue
     
-    
-    for i in x:
-        theo = 3.556*(1-math.exp(-i*10**-3/.33))
-        v.append(theo)
+
 
     # Draw the plot. Of course, the axes must be labeled. A grid is optional
     plot_axes.plot(x, y,'bo')
-    
-    plot_axes.plot(x,v,'r')
     plot_axes.set_xlabel(xlabel)
     plot_axes.set_ylabel(ylabel)
     plot_axes.grid(True)
