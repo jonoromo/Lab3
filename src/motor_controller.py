@@ -26,9 +26,11 @@ class Controller:
         self.resp_pos.append(pos)
     
     def print_results(self):
-        for i in self.resp_time:
+        init_time = self.resp_time[0]
+        for i in range(len(self.resp_time)-1):
+            self.resp_time[i] -= init_time
             print(f'{self.resp_time[i]},{self.resp_pos[i]}')
-    
+        
 if __name__ == "__main__":
     import motor_driver as moto
     import encoder_reader
@@ -55,5 +57,12 @@ if __name__ == "__main__":
     con = Controller(0.1, 10000)
     while True:
         moe.set_duty_cycle(con.run(10000,enc.read()))
+        con.meas_time(utime.ticks_ms())
+        con.meas_pos(enc.read())
         utime.sleep_ms(10)
+        if con.run(10000,enc.read()) < 10:
+            break
+    moe.set_duty_cycle(0)   
+    con.print_results()
+    
         
