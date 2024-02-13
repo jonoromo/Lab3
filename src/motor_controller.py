@@ -2,10 +2,20 @@
 
 class Controller:
     
-    def __init__(self):
-        self.hold = 1
+    def __init__(self, k_p, sp):
+        self.k_p = k_p
+        self.sp = sp
         
+    def run(self, sp, act):
+        PWM = self.k_p*(sp - act)
+        return PWM
+    
+    def set_setpoint(self, sp):
+        self.sp = sp
         
+    def set_Kp(self, k_p):
+        self.k_p = k_p
+    
 if __name__ == "__main__":
     import motor_driver as moto
     import encoder_reader
