@@ -41,6 +41,7 @@ def plot_example(plot_axes, plot_canvas, xlabel, ylabel):
     ser = Serial("COM5", 115200) # COM5 for brendan's laptop, COM3 for johnathan
     ser.write(b'\x04')
     time.sleep(.5)
+    
 #     kp = "0.1\n"
 #     ser.write(kp.encode())
     
@@ -48,7 +49,7 @@ def plot_example(plot_axes, plot_canvas, xlabel, ylabel):
     x = []
     y = []
     time.sleep(2.5)
-    for i in range(61):
+    for i in range(60):
         n = ser.readline().decode("utf-8")
         data.append(n)
     
