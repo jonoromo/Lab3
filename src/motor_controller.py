@@ -1,5 +1,3 @@
- # Lab 3 Code
-
 class Controller:
     
     def __init__(self, k_p, sp):
@@ -19,6 +17,7 @@ class Controller:
 if __name__ == "__main__":
     import motor_driver as moto
     import encoder_reader
+    import utime
     
     enPin = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP) # Initialize pin en_pin (PA10)
     in2_pin = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP) # Initialize pin in2_pin (PB5)
@@ -37,3 +36,9 @@ if __name__ == "__main__":
     chan_B = timer.channel(2, pyb.Timer.ENC_AB, pin=pinB)
     
     enc = encoder_reader.Encoder(pinA, pinB, timer, chan_A, chan_B)
+    
+    con = Controller(0.1, 10000)
+    while True:
+        moe.set_duty_cycle(con.run(10000,enc.read()))
+        utime.sleep_ms(10)
+        
