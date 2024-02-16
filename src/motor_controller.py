@@ -1,31 +1,69 @@
 class Controller:
     """!
-    Allows users to define proportional gain values and motor position setpoint.
+    Allows users to define a proportional gain value and motor position setpoint.
     """
     
     def __init__(self, k_p, sp):
+        """!
+        Initialize variables and make them discoverable within the class.
+        Create empty lists for time and position.
+        @param k_p: proportional gain value
+        @param sp setpoint: the angle [encoder counts]
+        @param resp_time: response time list: the time our program has been
+        running. Incremented by .1s from 0s until setpoint is reached.
+        @param resp_pos: response position list: reads encoder position for
+        every response time increment, stored in a list.
+        """
         self.k_p = k_p
         self.sp = sp
         self.resp_time = []
         self.resp_pos = []
         
     def run(self, sp, act):
+        """!
+        Defines and returns PWM. Takes setpoint and current encoder reading,
+        and returns a PWM signal telling the motor how hard to work to get to the
+        desired position.
+        @param sp: setpoint: the desired position [encoder counts]
+        @param act: actual encoder reading [encoder counts]
+        """
         PWM = self.k_p*(sp - act)
         return PWM
     
     def set_setpoint(self, sp):
+        """!
+        Redundant function to allow user to set a different setpoint. 
+        @param sp: setpoint: the desired position [encoder counts]
+        """
         self.sp = sp
         
     def set_Kp(self, k_p):
+        """!
+        Redundant function to allow user to set a different proportional gain.
+        @param k_p: proportional gain value
+        """
         self.k_p = k_p
         
     def meas_time(self, time):
-        self.resp_time.append(time)
+        """!
+        Measures time by appending the current time to a list of response times.
+        @param time: appends time, corresponding to the utime count every 0.1s
+        (assigned below)
+        """
+        self.resp_time.append(time) # appends time, corresponding to the
+                                    # utime count every 0.1s (assigned below)
         
     def meas_pos(self, pos):
+        """!
+        Measures position by recording the encoder's current position, every 0.1s.
+        @param pos: found by using the read function of encoder_reader
+        """
         self.resp_pos.append(pos)
     
     def print_results(self):
+        """!
+        Matches time data to position data and prints the two lists when called.
+        """
         init_time = self.resp_time[0]
         for i in range(len(self.resp_time)-1):
             self.resp_time[i] -= init_time
@@ -64,5 +102,3 @@ if __name__ == "__main__":
             break
     moe.set_duty_cycle(0)   
     con.print_results()
-    
-        
