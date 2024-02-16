@@ -38,7 +38,7 @@ def plot_example(plot_axes, plot_canvas, xlabel, ylabel):
     # port and processed to make two lists like these
     
     # Create serial port
-    ser = Serial("COM5", 115200) # COM5 for brendan's laptop, COM3 for johnathan
+    ser = Serial("COM3", 115200) # COM5 for brendan's laptop, COM3 for johnathan
     ser.write(b'\x04')
     time.sleep(.5)
     
@@ -128,7 +128,7 @@ def tk_matplot(plot_function, xlabel, ylabel, title):
 # file is imported as a module by some other main program
 if __name__ == "__main__":
     tk_matplot(plot_example,
-               xlabel="Time (ms)",
-               ylabel="Voltage (V)",
+               xlabel="Time [ms]",
+               ylabel="Encoder Position [ticks]",
                title="PinB0 Time Response")
 
