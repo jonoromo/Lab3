@@ -3,12 +3,23 @@ import encoder_reader
 import motor_controller
 import utime
 
-enPin = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP) # Initialize pin en_pin (PA10)
-in2_pin = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP) # Initialize pin in2_pin (PB5)
-in1_pin = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP) # Initialize pin in1_pin (PB4)
-timmy = pyb.Timer(3, freq=20000) # Initialize timer
-ch_pos = timmy.channel(2, pyb.Timer.PWM, pin=in2_pin) # Initialize positive direction timer channel
-ch_neg = timmy.channel(1, pyb.Timer.PWM, pin=in1_pin) # Initialize negative direction timer channel
+"""!
+This main file is to be uploaded to the nucleo board and run by writing a Ctrl-D from
+the GUI. The code defines the encoder and the motor pins, sets their correspondng timers,
+and instantiates a motor driver and encoder reader. The motor controller is also
+instantiated and a step response test is run. The step response repeatedly sets the motor
+duty cycle with the PWM signal from the closed loop proportional control from the motor
+controller run method. Every 10 ms the time and encoder position are recorded. This cycle runs
+for 60 iterations, providing enough time for the step response to reach steady state. Once the
+test has finished, the time and position are printed, which is read by the GUI and plotted.
+"""
+
+enPin = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
+in2_pin = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP)
+in1_pin = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
+timmy = pyb.Timer(3, freq=20000)
+ch_pos = timmy.channel(2, pyb.Timer.PWM, pin=in2_pin)
+ch_neg = timmy.channel(1, pyb.Timer.PWM, pin=in1_pin)
 
 moe = motor_driver.MotorDriver(enPin, in2_pin, in1_pin, timmy, ch_pos, ch_neg)
 
@@ -23,8 +34,6 @@ enc = encoder_reader.Encoder(pinA, pinB, timer, chan_A, chan_B)
 
 con = motor_controller.Controller(0.5, 10000)
 setpoint = 0
-# while True:
-# con.set_Kp(float(input()))
 setpoint += 10000
 for i in range(60):
     moe.set_duty_cycle(con.run(setpoint,enc.read()))
