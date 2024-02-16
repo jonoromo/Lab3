@@ -25,9 +25,9 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 
 def plot_example(plot_axes, plot_canvas, xlabel, ylabel):
     """!
-    Make an example plot to show a simple(ish) way to embed a plot into a GUI.
-    The data is just a nonsense simulation of a diving board from which a
-    typically energetic otter has just jumped.
+    This function is responsible for writing a Ctrl-D to the nucleo to run the
+    main code containing the step response. Then the data is read through serial
+    and plotted to a defined set of axes.
     @param plot_axes The plot axes supplied by Matplotlib
     @param plot_canvas The plot canvas, also supplied by Matplotlib
     @param xlabel The label for the plot's horizontal axis
